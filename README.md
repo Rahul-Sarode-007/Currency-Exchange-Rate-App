@@ -1,2 +1,2 @@
 # currency-exchange-app
-Try to create currency exchange app with help of API and JS
+Developed a real-time currency exchange rate application that dynamically fetches live data from external servers using API calls. Implemented features for seamless user interaction, providing up-to-the-minute exchange rates for a wide range of currencies. This project demonstrates proficiency in API integration, data retrieval, and delivering a responsive, data-driven application.
