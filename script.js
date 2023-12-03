@@ -15,6 +15,8 @@ todo: "use following API more features"
 
 let dropDown_1 =   document.querySelector("#dropdown-1")
 let dropDown_2 =   document.querySelector("#dropdown-2")
+let currentDate =  document.querySelector(".current-Date")
+
 let convertedValueElement = document.querySelector(".converted-value-element")
 
 // import countries from "./countries"
@@ -194,11 +196,17 @@ try {
   let exchangeRawData = (await exchangeRatePromise).json()
   let exchangeValue = (await exchangeRawData)
   let convertedValue =  exchangeValue[countryCode2]
+  let convertedDate =  exchangeValue.date
+
   convertedValueElement.innerHTML = convertedValue
+
+  currentDate.innerHTML= convertedDate
+  document.querySelector(".current-Date").style.visibility = "visible"
 
 
 } catch (error) {
   console.log("Error occure while fetching API")
+  console.log(error)
 }
 
 }
