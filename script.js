@@ -196,17 +196,19 @@ try {
   let exchangeRawData = (await exchangeRatePromise).json()
   let exchangeValue = (await exchangeRawData)
   let convertedValue =  exchangeValue[countryCode2]
-  let convertedDate =  exchangeValue.date
+ 
 
   convertedValueElement.innerHTML = convertedValue
 
-  currentDate.innerHTML= convertedDate
-  document.querySelector(".current-Date").style.visibility = "visible"
+ // let convertedDate =  exchangeValue.date
+  // currentDate.innerHTML= convertedDate
+  // document.querySelector(".current-Date").style.visibility = "visible"
 
 
 } catch (error) {
   console.log("Error occure while fetching API")
   console.log(error)
+  convertedValueElement.innerHTML = "Unable to fetch exchange rate. Please try again later."
 }
 
 }
