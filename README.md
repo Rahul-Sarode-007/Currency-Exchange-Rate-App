@@ -1,5 +1,7 @@
 # Currency Exchange App
-Developed a real-time currency exchange rate application that dynamically fetches live data from external servers using API calls. Implemented features for seamless user interaction. This project demonstrates proficiency in API integration, data retrieval, and delivering a responsive, data-driven application.
+Developed a real-time currency exchange rate application that dynamically fetches live data from external servers using API calls. Implemented features for seamless user interaction. This project demonstrates proficiency in API integration, data retrieval, and delivering a responsive, data-driven application. <br><br>
+Give it a try and let me know your thoughts.<br>
+https://rahul-sarode-007.github.io/Currency-Exchange-Rate-App/
 
 # Real Time Currency Converter App
 
