@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Currency Exchange App</title>
+    <title>Document</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -12,22 +12,41 @@
     </header>
     <div class="converter-container">
       <div class="container">
-        <!-- <p class="current-Date" style="visibility:hidden;">Date</p> -->
         <h2 class="converted-value-element">Select countries</h2>
+
         <div class="selectElement">
-          <select id="dropdown-1">
-            <option value="" disabled selected>Select Country 1</option>
-          </select>
+          <form action="" autocomplete="off">
+            <div class="autocomplete-wrapper">
+              <input
+                id="autocomplete-input"
+                type="text"
+                placeholder="Select Country 1"
+              />
+              <ul class="autocomplete-list"></ul>
+            </div>
+          </form>
 
           <div class="swapBtnContainer">
             <img src="./images/swap.png" class="swap" alt="swap image" />
           </div>
 
-          <select id="dropdown-2">
-            <option value="" disabled selected>Select Country 2</option>
-          </select>
+          <form action="" autocomplete="off">
+            <div class="autocomplete-wrapper">
+              <input
+                id="autocomplete-input2"
+                type="text"
+                placeholder="Select Country 2"
+              />
+              <ul class="autocomplete-list2">
+                
+              </ul>
+            </div>
+          </form>
+
         </div>
       </div>
+
+      <!-- ******************************************************** -->
 
       <div class="app-description">
         <h3>About the App</h3>
@@ -61,8 +80,6 @@
         </p>
       </div>
     </div>
-    <!-- todo: add flags -->
-    <!-- <img src="https://flagsapi.com/BE/flat/64.png"> -->
 
     <p class="copyright">Created By Rahul Sarode</p>
 

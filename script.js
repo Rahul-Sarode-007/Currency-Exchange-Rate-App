@@ -1,27 +1,3 @@
-todo: "use following API more features"
-
-// // ALL currency
-// // let currencies = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json"
-
-// // exchange to inr
-// // let exchange = https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.json
-
-// // DAte
-// // https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2023-01-01/currencies/eur.json
-
-
-// ****************************************************
-
-
-let dropDown_1 =   document.querySelector("#dropdown-1")
-let dropDown_2 =   document.querySelector("#dropdown-2")
-let currentDate =  document.querySelector(".current-Date")
-let switchBtn = document.querySelector(".swap")
-let option1,option2
-
-let convertedValueElement = document.querySelector(".converted-value-element")
-
-// import countries from "./countries"
 let countries = {
   aed: "Emirati Dirham",
   afn: "Afghan Afghani",
@@ -176,92 +152,236 @@ let countries = {
   zwd: "Zimbabwean Dollar",
   zwl: "Zimbabwean Dollar",
 };
+const userInput = document.querySelector("#autocomplete-input");
+const userInput2 = document.querySelector("#autocomplete-input2");
 
-for(i in countries){
-  let option1 = document.createElement("option")
-  let option2 = document.createElement("option")
+const ulList = document.querySelector(".autocomplete-list");
+const ulList2 = document.querySelector(".autocomplete-list2");
 
-  option1.text = countries[i]
-  option2.text = countries[i]
-
-  dropDown_1.append(option1)
-  dropDown_2.append(option2)
-}
-
-const callAPI = async(countryCode1,countryCode2)=>{
-
-let exchangeRatesURL = (`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${countryCode1}/${countryCode2}.json`)
-
-try {
-  let exchangeRatePromise = fetch(exchangeRatesURL)
-
-  let exchangeRawData = (await exchangeRatePromise).json()
-  let exchangeValue = (await exchangeRawData)
-  let convertedValue =  exchangeValue[countryCode2]
- 
-
-  convertedValueElement.innerHTML = convertedValue
-
- // let convertedDate =  exchangeValue.date
-  // currentDate.innerHTML= convertedDate
-  // document.querySelector(".current-Date").style.visibility = "visible"
+const convertedValueElement = document.querySelector(
+  ".converted-value-element"
+);
 
 
-} catch (error) {
-  console.log("Error occure while fetching API")
-  console.log(error)
-  convertedValueElement.innerHTML = "Unable to fetch exchange rate. Please try again later."
-}
+const retrieveValueFromObject = () => {
+  // Extract all keys of the 'countries' object and create an array of keys.
+  countryNames = Object.keys(countries).map((key) => countries[key]);
 
-}
+  // coverting array in desending order
+  countryNames = countryNames.sort((a, b) => b.localeCompare(a));
+};
 
+retrieveValueFromObject();
 
-const findKey = (country1, country2)=>{
-  let countryCode1 = Object.keys(countries).find((value)=>{
-    return countries[value] === country1;
-  })
+// *********************
 
-  let countryCode2 = Object.keys(countries).find((value)=>{
-    return countries[value] === country2;
-  })
-  // console.log(countryCode1,countryCode2)
+const onInputChange = (e) => {
+  let value = "";
+  let clickInput = e.target.id;
 
-  callAPI(countryCode1,countryCode2)
-}
-
-
-
-const handleUserInput = async()=>{
- 
-let value1 = dropDown_1.value
-let value2 = dropDown_2.value
-
-if(value1 && value2){
-  // console.log(value1)
-  // console.log(value2)
-  findKey(value1,value2)
-}
-}
-
-swapCountry = ()=>{
-  let value1 = dropDown_2.value
-  let value2 = dropDown_1.value
-
-
-  // console.log(dropDown_2.value)
-  // console.log(dropDown_1.value)
-
-
-   // Swaping the values in the dropdowns UI
-   dropDown_1.value = value1;
-   dropDown_2.value = value2;
- 
-  
-  if(value1 && value2){
-    findKey(value1,value2)
+  //User typed input
+  if (e.target.id === "autocomplete-input") {
+    value = userInput.value.toLowerCase();
   }
-}
+  if (e.target.id === "autocomplete-input2") {
+    value = userInput2.value.toLowerCase();
+  }
 
-dropDown_1.addEventListener("input",handleUserInput)
-dropDown_2.addEventListener("input",handleUserInput)
-switchBtn.addEventListener("click",swapCountry)
+  filteredNames = [];
+
+  if (value === "") {
+    removeAutoCompleteDropdown(clickInput);
+    return;
+  }
+
+  //Populating the filteredNames array, array contain user matched countries
+  countryNames.forEach((countryName) => {
+    if (countryName.toLowerCase().includes(value)) {
+      filteredNames.push(countryName);
+    }
+  });
+
+  // console.log(filteredNames)
+  createAutoCompleteDropdown(filteredNames, clickInput);
+};
+
+// *********************
+
+const handleInputClick = (e) => {
+  let clickInput = e.target.id;
+  filteredNames = [];
+
+  countryNames.forEach((countryName) => {
+    filteredNames.push(countryName);
+  });
+  createAutoCompleteDropdown(filteredNames, clickInput);
+};
+
+// *********************
+
+userInput.addEventListener("input", onInputChange);
+userInput.addEventListener("click", handleInputClick);
+
+userInput2.addEventListener("click", handleInputClick);
+userInput2.addEventListener("input", onInputChange);
+
+// *********************
+
+const createAutoCompleteDropdown = (liItems, clickInput) => {
+  removeAutoCompleteDropdown(clickInput);
+
+  if (clickInput === "autocomplete-input") {
+    liItems.forEach((liItem) => {
+      ulList.insertAdjacentHTML(
+        "afterbegin",
+        `<li><button>${liItem}</button></li>`
+      );
+    });
+
+    let dropdownBtns = document.querySelectorAll(".autocomplete-list button");
+    dropdownBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => onCountryButtonClick(e, clickInput));
+    });
+  }
+
+  if (clickInput === "autocomplete-input2") {
+    liItems.forEach((liItem) => {
+      ulList2.insertAdjacentHTML(
+        "afterbegin",
+        `<li><button>${liItem}</button></li>`
+      );
+    });
+
+    let dropdownBtns2 = document.querySelectorAll(".autocomplete-list2 button");
+    dropdownBtns2.forEach((btn) => {
+      btn.addEventListener("click", (e) => onCountryButtonClick(e, clickInput));
+    });
+  }
+};
+
+// *********************
+
+const removeAutoCompleteDropdown = (clickInput) => {
+  if (clickInput === "autocomplete-input") {
+    removeLiItems = document.querySelectorAll(".autocomplete-list li");
+    removeLiItems.forEach((removeLiItem) => {
+      removeLiItem.remove();
+    });
+  }
+
+  if (clickInput === "autocomplete-input2") {
+    removeLiItems = document.querySelectorAll(".autocomplete-list2 li");
+    removeLiItems.forEach((removeLiItem) => {
+      removeLiItem.remove();
+    });
+  }
+};
+
+// *********************
+
+let btnHTML, btnHTML2;
+const onCountryButtonClick = (e, clickInput) => {
+  e.preventDefault();
+
+  if (clickInput === "autocomplete-input") {
+    btnHTML = e.target.innerHTML;
+    userInput.value = btnHTML;
+  }
+
+  if (clickInput === "autocomplete-input2") {
+    btnHTML2 = e.target.innerHTML;
+    userInput2.value = btnHTML2;
+  }
+
+  if (btnHTML !== undefined && btnHTML2 !== undefined) {
+    findKey(btnHTML, btnHTML2);
+  }
+
+  removeAutoCompleteDropdown(clickInput);
+};
+
+// *********************
+
+swapCountry = () => {
+  // Basic swapping logic
+  // a=5,b=7,c=0
+  // c=a
+  // a=b
+  // b=c
+
+  // console.log(a,b)
+
+  let btnHTML3;
+
+  btnHTML3 = btnHTML;
+  btnHTML = btnHTML2;
+  btnHTML2 = btnHTML3;
+
+  userInput.value = btnHTML;
+  userInput2.value = btnHTML2;
+
+  if (btnHTML !== undefined && btnHTML2 !== undefined) {
+    findKey(btnHTML, btnHTML2);
+  }
+};
+
+let switchBtn = document.querySelector(".swap");
+switchBtn.addEventListener("click", swapCountry);
+
+// *********************
+
+const callAPI = async (countryCode1, countryCode2) => {
+  let exchangeRatesURL = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${countryCode1}/${countryCode2}.json`;
+
+  try {
+    let exchangeRatePromise = fetch(exchangeRatesURL);
+
+    let exchangeRawData = (await exchangeRatePromise).json();
+    let exchangeValue = await exchangeRawData;
+
+    // API return the value in below format
+    //    {
+    //      "date": "2023-12-16",
+    //      "inr": 83.02737928
+    //    }
+
+    let convertedValue = exchangeValue[countryCode2];
+
+    convertedValueElement.innerHTML = convertedValue;
+
+    //Date Funcationality
+    // let convertedDate =  exchangeValue.date
+    // currentDate.innerHTML= convertedDate
+    // document.querySelector(".current-Date").style.visibility = "visible"
+
+
+  } catch (error) {
+    console.log("Error occure while fetching API");
+    console.log(error);
+    convertedValueElement.innerHTML =
+      "Unable to fetch exchange rate. Please try again later.";
+  }
+};
+
+// *********************
+
+const findKey = (country1, country2) => {
+  console.log(country1);
+  console.log(country2);
+
+  //Finding the key from value
+  let countryCode1 = Object.keys(countries).find((value) => {
+    return countries[value] === country1;
+  });
+
+  let countryCode2 = Object.keys(countries).find((value) => {
+    return countries[value] === country2;
+  });
+
+  callAPI(countryCode1, countryCode2);
+};
+
+
+
+// *****************************************
+// TODO: keyboard listener and deappering list after clicking on body
